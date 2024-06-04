@@ -1,0 +1,5 @@
+build
+rel/*
+build.sh
+build.cmd
+build_selaco.cmd

@@ -1,0 +1,99 @@
+class SimpleRegenerator : inventory
+{
+	default
+    {
+		inventory.maxamount 1;
+	}
+
+    int previousHealth;
+    int currentTicks;
+    bool startedRegen;
+
+    void DoRegen()
+    {
+        if (!startedRegen)
+        {
+            startedRegen = true;
+            owner.GiveInventory("RegenActive", 1);
+        
+            //play the start sound
+            owner.A_StartSound("player/regen/active", CHAN_UI, 0.35);
+        }
+
+        //Play healing sound
+        owner.A_StartSound("player/regen/tick", CHAN_5, 0.7);
+
+        //Heal
+        int heal = owner.health + regen_per_tick;
+        if (heal > regen_max)
+            heal = regen_max;
+
+        owner.A_SetHealth(heal);
+
+        //if we're finished, stop regenerating
+        if (heal >= regen_max)
+            StopRegen();
+        else
+            owner.ACS_ScriptCall("HealIndicator");
+    
+        currentTicks = 0;
+    }
+
+    void StopRegen()
+    {
+        if (startedRegen)
+        {
+            owner.A_StopSound(CHAN_UI);
+            owner.TakeInventory("RegenActive", 1);
+            owner.A_PlaySound("player/regen/complete", CHAN_AUTO, 0.7, 0, 0);
+            startedRegen = false;
+        }
+        currentTicks = 0;
+    }
+
+    override void DoEffect()
+    {
+        
+        Super.DoEffect();
+        if (owner)
+        {
+            //We need to convert our start delay and delay per tick from seconds to tics
+            int regen_delay_start_tics = regen_delay_start * 35.0;
+            int regen_delay_per_tick_tics = regen_delay_per_tick * 35.0;
+
+            int health = owner.Health;
+            
+            if (health <= 0)
+                return;
+
+            if (owner.CheckInventory("HardcoreMode",1) && !regen_allow_hardcore) //no regeneration on hardcore (and no post on sundays)
+                return;
+    
+            //Stop regeneration if we're above max health
+            if (health >= regen_max)
+            {
+                owner.TakeInventory("HasLowHealth", 1);
+                StopRegen();
+            }
+
+            //If we took damage last frame, reset the timer
+            else if (health < previousHealth)
+                StopRegen();
+
+            //Otherwise, we can regenerate
+            else if (health < regen_max)
+            {
+                owner.GiveInventory("HasLowHealth", 1);
+
+                //Check for regen
+                if (currentTicks >= regen_delay_start_tics && !startedRegen)
+                    DoRegen();
+                else if (currentTicks >= regen_delay_per_tick_tics && startedRegen)
+                    DoRegen();
+            }
+
+            previousHealth = owner.Health;
+            currentTicks++;
+        }
+    }
+}

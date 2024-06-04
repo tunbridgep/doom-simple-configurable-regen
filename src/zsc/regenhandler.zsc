@@ -1,0 +1,20 @@
+//This simply makes sure the player has the regen item,
+//and blocks the ACS scripts from running
+class RegenHandler : StaticEventHandler
+{
+    override void PlayerEntered(PlayerEvent e)
+    {
+        if (gamestate == 7) //TITLEMAP
+            return;
+            
+        let player = players[e.PlayerNumber].mo;
+        player.GiveInventory("SimpleRegenerator",1);
+    }
+
+    //This is a horrible, awful, horrendous, dirty, gross hack
+    //Abort the regen script because we've moved it to zscript
+    override void WorldTick()
+    {
+        ACS_Terminate(1111,0);
+    }
+}
