@@ -7,7 +7,18 @@ class SimpleRegenerator : inventory
 
     int previousHealth;
     int currentTicks;
+    int displayTicks;
     bool startedRegen;
+
+    void PlayConditionalSound(int soundlevel, string sound, int channel, float volume, bool stopsound = false)
+    {
+        if (regen_sounds >= soundlevel)
+        {
+            if (stopsound)
+                owner.A_StopSound(channel);
+            owner.A_StartSound(sound, channel, CHANF_UI|CHANF_OVERLAP, volume, 0, 0);
+        }
+    }
 
     void DoRegen()
     {
@@ -17,11 +28,14 @@ class SimpleRegenerator : inventory
             owner.GiveInventory("RegenActive", 1);
         
             //play the start sound
-            owner.A_StartSound("player/regen/active", CHAN_UI, 0.35);
+            PlayConditionalSound(1,"player/regen/active", CHAN_UI, 0.35);
         }
-
+            
         //Play healing sound
-        owner.A_StartSound("player/regen/tick", CHAN_5, 0.7);
+        PlayConditionalSound(2,"player/regen/tick", CHAN_5, 0.7);
+           
+        //Display graphics
+        UpdateHealIndicator(true);
 
         //Heal
         int heal = owner.health + regen_per_tick;
@@ -33,8 +47,6 @@ class SimpleRegenerator : inventory
         //if we're finished, stop regenerating
         if (heal >= regen_max)
             StopRegen();
-        else
-            owner.ACS_ScriptCall("HealIndicator");
     
         currentTicks = 0;
     }
@@ -43,12 +55,28 @@ class SimpleRegenerator : inventory
     {
         if (startedRegen)
         {
-            owner.A_StopSound(CHAN_UI);
             owner.TakeInventory("RegenActive", 1);
-            owner.A_PlaySound("player/regen/complete", CHAN_AUTO, 0.7, 0, 0);
+            PlayConditionalSound(1,"player/regen/complete", CHAN_AUTO, 0.7, true);
             startedRegen = false;
         }
         currentTicks = 0;
+    }
+
+
+    void UpdateHealIndicator(bool start)
+    {
+        if (start)
+        {
+            displayTicks = 10;
+            TakeInventory("MedkitIdle", 1);
+            GiveInventory("MedkitUsing", 1);
+        }
+        else
+        {
+            displayTicks = -1;
+            GiveInventory("MedkitIdle", 1);
+            TakeInventory("MedkitUsing", 1);
+        }
     }
 
     override void DoEffect()
@@ -60,9 +88,8 @@ class SimpleRegenerator : inventory
             //We need to convert our start delay and delay per tick from seconds to tics
             int regen_delay_start_tics = regen_delay_start * 35.0;
             int regen_delay_per_tick_tics = regen_delay_per_tick * 35.0;
-
             int health = owner.Health;
-            
+
             if (health <= 0)
                 return;
 
@@ -91,6 +118,12 @@ class SimpleRegenerator : inventory
                 else if (currentTicks >= regen_delay_per_tick_tics && startedRegen)
                     DoRegen();
             }
+
+            //Remove display after it's been active for 10 tics
+            if (displayTicks == 0)
+                UpdateHealIndicator(false);
+            else
+                displayTicks--;
 
             previousHealth = owner.Health;
             currentTicks++;

@@ -1,3 +1,11 @@
+//Sound Options
+OptionValue RegenSounds
+{
+    0, "$REGEN_SOUNDS_NONE"
+    1, "$REGEN_SOUNDS_STARTSTOP"
+    2, "$REGEN_SOUNDS_ALL"
+}
+
 AddOptionMenu "ModOptionsMenu"
 {
     ModHeader "$REGEN_MOD_NAME", "Sarge945", "$REGEN_MOD_DESC", "SRBANNER" 
@@ -5,5 +13,6 @@ AddOptionMenu "ModOptionsMenu"
     TooltipSlider "$REGEN_HEALTH_PER_TICK", "$REGEN_HEALTH_PER_TICK_DESC", "", "regen_per_tick", 0,100,1,0
     TooltipSlider "$REGEN_DELAY_START", "$REGEN_DELAY_START_DESC", "", "regen_delay_start", 0,30,0.1
     TooltipSlider "$REGEN_DELAY_PER_TICK", "$REGEN_DELAY_PER_TICK_DESC", "", "regen_delay_per_tick", 0,30,0.1
-    TooltipOption "$REGEN_ALLOW_HARDCORE", "$REGEN_ALLOW_HARDCORE_DESC", "", "regen_allow_hardcore", "OnOff"
+    TooltipOption "$REGEN_ALLOW_HARDCORE", "$REGEN_ALLOW_HARDCORE_DESC", "", "regen_allow_hardcore", OnOff
+    TooltipOption "$REGEN_SOUNDS", "$REGEN_SOUNDS_DESC", "", "regen_sounds", RegenSounds
 }

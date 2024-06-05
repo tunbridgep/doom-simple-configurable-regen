@@ -12,3 +12,9 @@ REGEN_DELAY_PER_TICK = "Delay Between Surges (Seconds)";
 REGEN_DELAY_PER_TICK_DESC = "How long to delay between each surge of health regeneration.\n\n\c[omniblue](Default: 0.7)";
 REGEN_ALLOW_HARDCORE = "Regenerate Health in Hardcore Mode";
 REGEN_ALLOW_HARDCORE_DESC = "Determines whether Health Regeneration should be enabled in Hardcore mode. This is a cheat.\n\n\c[omniblue](Default: Off)";
+
+REGEN_SOUNDS = "Regeneration Sounds";
+REGEN_SOUNDS_DESC = "Enable or Disable Regeneration Sounds\n\n\c[omniblue]None: \c[white]Health Regeneration makes no sounds.\n\n\c[omniblue]Start/Stop Sounds: \c[white]Sounds will be played when regeneration begins, and when it completes.\n\n\c[omniblue]All Sounds: \c[white]Sounds will be played when regeneration begins, on each surge, and when it completes.\n\n\c[omniblue](Default: All Sounds)";
+REGEN_SOUNDS_NONE = "None";
+REGEN_SOUNDS_STARTSTOP = "Start/Stop Sounds";
+REGEN_SOUNDS_ALL = "All Sounds";
