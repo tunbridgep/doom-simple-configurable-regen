@@ -20,6 +20,21 @@ class SimpleRegenerator : inventory
         }
     }
 
+    void DoDangerState()
+    {
+        let dawn = Dawn(owner);
+        int health = owner.Health;
+
+        if (dawn)
+        {
+            if (dawn.isDangerState && health > regen_danger_health)
+                dawn.EndDangerState();
+            else if (!dawn.isDangerState && health <= regen_danger_health)
+                dawn.StartDangerState();
+        }
+
+    }
+
     void DoRegen()
     {
         if (!startedRegen)
@@ -124,6 +139,9 @@ class SimpleRegenerator : inventory
                 UpdateHealIndicator(false);
             else
                 displayTicks--;
+
+            //Handle danger state (red vignette and cries of pain)
+            DoDangerState();
 
             previousHealth = owner.Health;
             currentTicks++;

@@ -1,7 +1,13 @@
 [enu default]
 
+//Mod info
 REGEN_MOD_NAME = "Simple Regeneration Tweaks";
 REGEN_MOD_DESC = "This mod allows complete freedom over the health regeneration system, and allows configuration of most parameters related to health regeneration, including disabling it entirely.";
+
+//Categories
+REGEN_GAMEPLAY_SETTINGS = "Gameplay Settings";
+REGEN_QOL_SETTINGS = "Quality of Life Settings";
+
 REGEN_MAX_HEALTH = "Max Health Regeneration";
 REGEN_MAX_HEALTH_DESC = "The maximum amount of health that can be recovered.\n\nRegeneration will not happen beyond this health level.\n\nSet to \c[omniblue]0\c[white] to disable regeneration altogether.\n\n\c[omniblue](Default: 35)";
 REGEN_HEALTH_PER_TICK = "Health Per Surge";
@@ -18,3 +24,6 @@ REGEN_SOUNDS_DESC = "Enable or Disable Regeneration Sounds\n\n\c[omniblue]None: 
 REGEN_SOUNDS_NONE = "None";
 REGEN_SOUNDS_STARTSTOP = "Start/Stop Sounds";
 REGEN_SOUNDS_ALL = "All Sounds";
+
+REGEN_DANGER_HEALTH = "Health Warning Level";
+REGEN_DANGER_HEALTH_DESC = "The health level at which the HUD will display a red vignette and Dawn will make pained sounds.\n\nSet to \c[omniblue]0\c[white] to disable warnings altogether.\n\n\c[omniblue](Default: 25)";
