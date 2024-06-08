@@ -8,7 +8,6 @@ class SimpleRegenerator : inventory
     int previousHealth;
     int currentTicks;
     int displayTicks;
-    int oldStartTics;
     bool startedRegen;
 
     void PlayConditionalSound(int soundlevel, string sound, int channel, float volume, bool stopsound = false)
@@ -38,7 +37,10 @@ class SimpleRegenerator : inventory
             if (dawn.isDangerState && health > regen_danger_health)
                 dawn.EndDangerState();
             else if (!dawn.isDangerState && health <= regen_danger_health)
+            {
+                owner.GiveInventory("HasLowHealth", 1);
                 dawn.StartDangerState();
+            }
         }
 
     }
@@ -50,22 +52,35 @@ class SimpleRegenerator : inventory
     }
 
     //Set up the circular red bar that appears when regeneration is recharging
-    void ResetChargeBar()
+    void ResetChargeBar(int start_delay)
     { 
+
+        //prevent division by zero
+        if (start_delay <= 0)
+            return;
+
         class<Inventory> itemClass = 'RegenTics';
+        let item = owner.FindInventory(itemClass,true);
 
-        //Replace the inventory item with a new one
-        //because the display works based on maxamount
-        let item = FindInventory(itemClass);
+        if (!item)
+        {
+            owner.GiveInventory(itemClass.GetClassName(),9999);
+            item = owner.FindInventory(itemClass,true);
+        }
+
         if (item)
-            item.Destroy();
-        item = Inventory(Spawn(itemClass));
-        item.maxAmount = regen_delay_start * 35.0 + 0.5;
-        item.Touch(owner);
-        console.printf("New Max Amount is: %d",item.maxAmount);
+        {
+            //We need to set our amount based on our percentage of the max
+            let max = item.MaxAmount;
 
-        //Now empty the bar
-        owner.GiveInventory("RegenTics", 9999);
+            float percent = (currentTicks + 0.0) / (start_delay + 0.0);
+            //console.printf("currentTicks: %d, start_delay: %d, currentTicks / start_delay: %f",currentTicks,start_delay,percent);
+            //console.printf("Max: %d", max * percent);
+            //console.printf("Actual Max: %d",item.MaxAmount);
+            let amt = item.MaxAmount - max * percent;
+            item.Amount = int(amt + 0.5);
+            //console.printf("New Amount: %d",item.Amount);
+        }
     }
 
     void DoRegen()
@@ -150,31 +165,25 @@ class SimpleRegenerator : inventory
             //Otherwise, we can regenerate
             else if (health < regen_max)
             {
-                owner.GiveInventory("HasLowHealth", 1);
+                //Update the health circle
+                if (!startedRegen)
+                    ResetChargeBar(regen_delay_start_tics);
 
                 //Check for regen
                 if (currentTicks >= regen_delay_start_tics && !startedRegen)
                     DoRegen();
                 else if (currentTicks >= regen_delay_per_tick_tics && startedRegen)
                     DoRegen();
-                
-                //add more to the charge bar slowly
-                owner.TakeInventory("RegenTics",1);
             }
 
             //Handle danger state (red vignette and cries of pain)
             DoDangerState();
-
-            //Update the health circle if our start delay was updated
-            if (oldStartTics != regen_delay_start_tics)
-                ResetChargeBar();
 
             //If we've removed mercy, set it to always be on cooldown
             DoNoMercy();
 
             previousHealth = owner.Health;
             currentTicks++;
-            oldStartTics = regen_delay_start_tics;
         }
     }
 }
