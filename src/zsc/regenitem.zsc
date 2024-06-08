@@ -43,6 +43,12 @@ class SimpleRegenerator : inventory
 
     }
 
+    override void PostBeginPlay()
+    {
+        Super.PostBeginPlay();
+        Console.printf("Adding Regenerator");
+    }
+
     //Set up the circular red bar that appears when regeneration is recharging
     void ResetChargeBar()
     { 
@@ -54,7 +60,7 @@ class SimpleRegenerator : inventory
         if (item)
             item.Destroy();
         item = Inventory(Spawn(itemClass));
-        item.maxAmount = regen_delay_start * 35.0;
+        item.maxAmount = regen_delay_start * 35.0 + 0.5;
         item.Touch(owner);
         console.printf("New Max Amount is: %d",item.maxAmount);
 
@@ -124,6 +130,9 @@ class SimpleRegenerator : inventory
                 return;
 
             if (owner.CheckInventory("HardcoreMode",1) && !regen_allow_hardcore) //no regeneration on hardcore (and no post on sundays)
+                return;
+
+            if (level.IsFrozen()) //No change at all if the game is frozen
                 return;
 
             //Stop regeneration if we're above max health

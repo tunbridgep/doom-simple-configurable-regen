@@ -23,7 +23,13 @@ class RegenHandler : StaticEventHandler
                 if (playeringame[i])
                 {
                     let player = players[i].mo;
-                    player.GiveInventory("SimpleRegenerator",1);
+                    let item = SimpleRegenerator(player.FindInventory("SimpleRegenerator"));
+                    if (item)
+                        item.ResetChargeBar();
+                    else
+                    {
+                        player.GiveInventory("SimpleRegenerator",1);
+                    }
                 }
             }
         }
