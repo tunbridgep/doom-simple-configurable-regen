@@ -34,5 +34,7 @@ class RegenHandler : StaticEventHandler
     override void WorldTick()
     {
         ACS_Terminate(1111,0);
+        if (!regen_enable_sauna)
+            players[0].mo.ACS_NamedTerminate("SaunaRegen",0);
     }
 }

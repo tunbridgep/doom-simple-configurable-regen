@@ -20,13 +20,23 @@ REGEN_ALLOW_HARDCORE = "Regenerate Health in Hardcore Mode";
 REGEN_ALLOW_HARDCORE_DESC = "Determines whether Health Regeneration should be enabled in Hardcore mode. This is a cheat.\n\n\c[omniblue](Default: No)";
 
 REGEN_SOUNDS = "Regeneration Sounds";
-REGEN_SOUNDS_DESC = "Enable or Disable Regeneration Sounds\n\n\c[omniblue]None: \c[white]Health Regeneration makes no sounds.\n\n\c[omniblue]Start/Stop Sounds: \c[white]Sounds will be played when regeneration begins, and when it completes.\n\n\c[omniblue]All Sounds: \c[white]Sounds will be played when regeneration begins, on each surge, and when it completes.\n\n\c[omniblue](Default: All Sounds)";
+REGEN_SOUNDS_DESC = "Enable or Disable Regeneration Sounds";
 REGEN_SOUNDS_NONE = "None";
 REGEN_SOUNDS_STARTSTOP = "Start/Stop Sounds";
 REGEN_SOUNDS_ALL = "All Sounds";
 
+REGEN_SOUNDS_DESC_1 = "Health Regeneration makes no sounds.";
+REGEN_SOUNDS_DESC_2 = "Sounds will be played when regeneration begins, and when it completes.";
+REGEN_SOUNDS_DESC_3 = "Sounds will be played when regeneration begins, on each surge, and when it completes.\n\n\c[omniblue](Default: All Sounds)";
+
 REGEN_DANGER_HEALTH = "Health Warning Level";
 REGEN_DANGER_HEALTH_DESC = "The health level at which the HUD will display a red vignette and Dawn will make pained sounds.\n\nSet to \c[omniblue]0\c[white] to disable warnings altogether.\n\n\c[omniblue](Default: 25)";
 
+REGEN_ENABLE_SAUNA = "Enable Sauna Regeneration";
+REGEN_ENABLE_SAUNA_DESC = "If Enabled, Dawn will be able to recover health by visiting the sauna at the Sky Lounge.\n\nTakes effect upon re-entering the sauna.\n\n\c[omniblue](Default: Yes)";
+
 REGEN_NO_MERCY = "Disable Mercy Health";
 REGEN_NO_MERCY_DESC = "Dawn will not be given a second chance when falling to 1 health.\n\n\c[omniblue](Default: No)";
+
+REGEN_BANKING = "Allow Regeneration Banking";
+REGEN_BANKING_DESC = "Allow regeneration to be 'Banked'. This will allow the player to regenerate past the maximum regeneration amount if they pick up health while regenerating.\n\nFor example, if a player has 10 health and would regenerate up to 30, but then picks up a medikit and heals up to 20, they will regenerate up to 40. This is designed to circumvent wasting health if picking up health items while regenerating.\n\n\c[omniblue](Default: No)";

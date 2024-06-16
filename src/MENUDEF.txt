@@ -6,6 +6,13 @@ OptionValue RegenSounds
     2, "$REGEN_SOUNDS_ALL"
 }
 
+OptionString regen_sounds_desc
+{
+	"$REGEN_SOUNDS_NONE", 		"$REGEN_SOUNDS_DESC_1"
+	"$REGEN_SOUNDS_STARTSTOP", 	"$REGEN_SOUNDS_DESC_2"
+	"$REGEN_SOUNDS_FULL", 		"$REGEN_SOUNDS_DESC_3"
+}
+
 AddOptionMenu "ModOptionsMenu"
 {
     ModHeader "$REGEN_MOD_NAME", "Sarge945", "$REGEN_MOD_DESC", "SRBANNER" 
@@ -15,9 +22,11 @@ AddOptionMenu "ModOptionsMenu"
     TooltipSlider "$REGEN_DELAY_START", "$REGEN_DELAY_START_DESC", "", "regen_delay_start", 0,30,0.1
     TooltipSlider "$REGEN_DELAY_PER_TICK", "$REGEN_DELAY_PER_TICK_DESC", "", "regen_delay_per_tick", 0,30,0.1
     TooltipOption "$REGEN_ALLOW_HARDCORE", "$REGEN_ALLOW_HARDCORE_DESC", "", "regen_allow_hardcore", YesNo
+    TooltipOption "$REGEN_BANKING", "$REGEN_BANKING_DESC", "", "regen_banking", YesNo
     TooltipOption "$REGEN_NO_MERCY", "$REGEN_NO_MERCY_DESC", "", "regen_no_mercy", YesNo
+    TooltipOption "$REGEN_ENABLE_SAUNA", "$REGEN_ENABLE_SAUNA_DESC", "", "regen_enable_sauna", YesNo
     space 20
     StaticText "$REGEN_QOL_SETTINGS", "OMNIBLUE"
-    TooltipOption "$REGEN_SOUNDS", "$REGEN_SOUNDS_DESC", "", "regen_sounds", RegenSounds
+    TooltipOption "$REGEN_SOUNDS", "$REGEN_SOUNDS_DESC", "", "regen_sounds", RegenSounds, regen_sounds_desc
     TooltipSlider "$REGEN_DANGER_HEALTH", "$REGEN_DANGER_HEALTH_DESC", "", "regen_danger_health", 0,100,1,0
 }

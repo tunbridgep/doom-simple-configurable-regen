@@ -9,6 +9,7 @@ class SimpleRegenerator : inventory
     int currentTicks;
     int displayTicks;
     bool startedRegen;
+    int regenBank;
 
     void PlayConditionalSound(int soundlevel, string sound, int channel, float volume, bool stopsound = false)
     {
@@ -99,18 +100,28 @@ class SimpleRegenerator : inventory
            
         //Display graphics
         UpdateHealIndicator();
+            
+        int heal = owner.health + regen_per_tick;
 
         //Heal
-        int heal = owner.health + regen_per_tick;
-        if (heal > regen_max)
-            heal = regen_max;
+        if (regen_banking)
+        {
+            if (heal > owner.health + regenBank)
+                heal = owner.health + regenBank;
+        }
+        else
+        {
+            if (heal > regen_max)
+            {
+                heal = regen_max;
+                regenBank = 0;
+            }
+        }
+
+        //subtract from bank
+        regenBank -= regen_per_tick;
 
         owner.A_SetHealth(heal);
-
-        //if we're finished, stop regenerating
-        if (heal >= regen_max)
-            StopRegen();
-    
         currentTicks = 0;
     }
 
@@ -123,6 +134,13 @@ class SimpleRegenerator : inventory
             startedRegen = false;
         }
         currentTicks = 0;
+
+        //Update the bank with how much health we're missing.
+        let bank = regen_max - owner.Health;
+        if (bank > 0)
+            regenBank = bank;
+        else
+            regenBank = 0;
     }
 
 
@@ -150,20 +168,12 @@ class SimpleRegenerator : inventory
             if (level.IsFrozen()) //No change at all if the game is frozen
                 return;
 
-            //Stop regeneration if we're above max health
-            if (health >= regen_max)
-            {
-                owner.TakeInventory("HasLowHealth", 1);
-                StopRegen();
-                owner.GiveInventory("RegenTics",9999);
-            }
-
             //If we took damage last frame, reset the timer
-            else if (health < previousHealth)
+            if (health < previousHealth)
                 StopRegen();
 
             //Otherwise, we can regenerate
-            else if (health < regen_max)
+            else if (regenBank > 0)
             {
                 //Update the health circle
                 if (!startedRegen)
@@ -174,6 +184,14 @@ class SimpleRegenerator : inventory
                     DoRegen();
                 else if (currentTicks >= regen_delay_per_tick_tics && startedRegen)
                     DoRegen();
+            }
+
+            //Stop regeneration if we've got none left to do
+            else
+            {
+                owner.TakeInventory("HasLowHealth", 1);
+                StopRegen();
+                owner.GiveInventory("RegenTics",9999);
             }
 
             //Handle danger state (red vignette and cries of pain)

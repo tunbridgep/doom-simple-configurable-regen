@@ -4,5 +4,7 @@ server float regen_delay_start = 4.0; //How long until we start healing
 server float regen_delay_per_tick = 0.7; //How long between instances of healing
 server bool regen_allow_hardcore = false; //Enable regeneration in Hardcore more
 server bool regen_no_mercy = false; //Disable Mercy Health
+server bool regen_banking = false; //Allow regenerating even when picking up health
+server bool regen_enable_sauna = true; //Allow regenerating health at the sauna
 user nosave noarchive int regen_sounds = 2; //By default, have all sounds enabled
 server float regen_danger_health = 25; //Health level at which Dawn will enter her danger state
